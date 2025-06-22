@@ -2,7 +2,6 @@ import os
 import pandas as pd
 import numpy as np
 import joblib
-from sklearn.model_selection import train_test_split
 from src.logger import get_logger
 from src.custom_exception import CustomException
 from pathlib import Path
@@ -33,7 +32,7 @@ class DataProcessor:
         
     def load_data(self, usecols):
         try:
-            self.rating_df = pd.read_csv(self.input_file, low_memory=True, usecols=usecols)
+            self.rating_df = pd.read_csv(self.input_file, low_memory=True,nrows=40000000, usecols=usecols)
             logger.info("Data loaded Sucesfully for Data Processing")
         except Exception as e:
             raise CustomException(f"Failed to load data {e}",sys)
@@ -119,4 +118,55 @@ class DataProcessor:
         except Exception as e:
             raise e
         
+    def process_anime_data(self):
+        try:
+            df = pd.read_csv(ANIME_CSV)
+            cols = ["MAL_ID","Name","Genres","sypnopsis"]
+            synopsis_df = pd.read_csv(ANIME_SYNOPSIS_CSV,usecols=cols)
+            
+            df = df.replace("Unknown", np.nan)
+            def getAnimeName(anime_id):
+                try:
+                    name = df[df.anime_id == anime_id].eng_version.values[0]
+                    if name is np.nan:
+                        name = df[df.anime_id == anime_id].Name.values[0]
+                except Exception as e:
+                    raise(e)
+                return name
+            df['anime_id'] = df['MAL_ID']
+            df['eng_version'] = df['English name']
+            df['eng_version'] = df.anime_id.apply(lambda x: getAnimeName(x))
+            
+            df.sort_values(
+                            by=['Score'],
+                            inplace=True,
+                            ascending=False,
+                            kind="quicksort",
+                            na_position="last"
+                        )
+            df = df[['anime_id',"eng_version","Score","Genres","Episodes","Type","Premiered","Members"]]
+            df.to_csv(DF_PATH, index=False)
+            synopsis_df.to_csv(SYNOPSIS_DF,index=True)
+            
+            logger.info("DF and sysnopsis df is saved sucssesfully.....")
+        except Exception as e:
+            raise CustomException("Failed to save the anime and anime synopsys data ", sys)
+        
+    def run(self):
+        try:
+            self.load_data(usecols=['user_id','anime_id',"rating"])
+            self.filter_users()
+            self.scale_ratings()
+            self.encode_data()
+            self.split_data()
+            self.save_artifacts()
+            
+            self.process_anime_data()
+        except Exception as e:
+            logger.error(str(e))
+            raise CustomException("Failed data procesing..",sys)
+        
+if __name__ == "__main__":
+    data_processor = DataProcessor(input_file=ANIMELIST_CSV,output_dir=PROCESSED_DIR)
+    data_processor.run()
                         
