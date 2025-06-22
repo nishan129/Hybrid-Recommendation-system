@@ -1,5 +1,9 @@
+tensorflow==2.19.0
 pandas
 numpy
-setuptools
+setuptools>=64
 google-cloud-storage
 pyyaml
+wordcloud
+ipykernel
+joblib
