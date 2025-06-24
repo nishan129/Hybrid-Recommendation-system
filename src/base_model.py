@@ -3,7 +3,6 @@ from tensorflow.keras import layers
 from tensorflow.keras.models import Model
 from tensorflow.keras.optimizers import Adam  
 from tensorflow.keras.layers import Activation, BatchNormalization, Input, Embedding,Dot,Dense,Flatten
-from tensorflow.keras.callbacks import ModelCheckpoint, LearningRateScheduler, EarlyStopping
 from utils.common_functions import read_yaml
 from src.logger import get_logger
 from src.custom_exception import CustomException
