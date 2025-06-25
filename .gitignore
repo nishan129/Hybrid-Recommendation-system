@@ -51,6 +51,12 @@ coverage.xml
 .pytest_cache/
 cover/
 artifacts/
+artifacts/raw/
+artifacts/processed/
+artifacts/model/
+artifacts/model_checkpoint/
+
+Hybrid_Recomndation_System.egg-info/
 
 # Translations
 *.mo
