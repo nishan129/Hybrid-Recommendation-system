@@ -9,3 +9,5 @@ ipykernel
 joblib
 comet-ml
 dvc
+dvc-gs
+
