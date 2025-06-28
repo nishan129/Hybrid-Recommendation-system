@@ -8,7 +8,7 @@ CONFIG_PATH = "config/config.yaml"
 
 ############ DATA PROCESSING #############
 
-PROCESSED_DIR = "artifacts/processed"
+PROCESSED_DIR = "artifacts\processed"
 ANIMELIST_CSV = "artifacts/raw/animelist.csv"
 ANIME_CSV = "artifacts/raw/anime.csv"
 ANIME_SYNOPSIS_CSV = "artifacts/raw/anime_with_synopsis.csv"

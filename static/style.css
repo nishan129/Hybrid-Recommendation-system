@@ -1,0 +1,94 @@
+/* Reset and base */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #121212;
+  color: #ffffff;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+}
+
+/* Container */
+.container {
+  max-width: 600px;
+  width: 100%;
+  background-color: #1e1e1e;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.05);
+}
+
+/* Heading */
+h1 {
+  text-align: center;
+  margin-bottom: 25px;
+  color: #ffca28;
+}
+
+/* Form */
+.recommendation-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.recommendation-form label {
+  font-size: 16px;
+}
+
+.recommendation-form input {
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 6px;
+  border: none;
+  background-color: #2a2a2a;
+  color: white;
+}
+
+.recommendation-form button {
+  padding: 12px;
+  font-size: 16px;
+  background-color: #f06292;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.recommendation-form button:hover {
+  background-color: #ec407a;
+}
+
+/* Recommendations */
+.recommendation-results h2 {
+  margin-bottom: 15px;
+  color: #80cbc4;
+}
+
+.recommendation-results ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.recommendation-results li {
+  background-color: #2a2a2a;
+  margin-bottom: 10px;
+  padding: 12px;
+  border-radius: 6px;
+  transition: transform 0.2s ease;
+}
+
+.recommendation-results li:hover {
+  transform: scale(1.02);
+  background-color: #333;
+}

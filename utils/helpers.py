@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import joblib
 from config.paths_config import *
+import os
 
 ##### 1. GET_ANIME_FRAME
 
@@ -31,9 +32,9 @@ def find_similar_animes(name,path_anime_weights,
     anime_weights = joblib.load(path_anime_weights)
     anime2anime_encode = joblib.load(path_anime2anime_encode)
     anime2anime_decoded = joblib.load(path_anime2anime_decoded)
-    df = pd.read_csv(path_df)
+  
     try:
-        index = getAnimeFrame(name,df).anime_id.values[0]
+        index = getAnimeFrame(name,path_df).anime_id.values[0]
         encoded_index = anime2anime_encode.get(index)
         
         weights = anime_weights
@@ -58,7 +59,7 @@ def find_similar_animes(name,path_anime_weights,
         for close in closest:
             decoded_id = anime2anime_decoded.get(close)
             
-            anime_frame = getAnimeFrame(decoded_id,df)
+            anime_frame = getAnimeFrame(decoded_id,path_df)
             
             anime_name = anime_frame.eng_version.values[0]
             genre = anime_frame.Genres.values[0]
@@ -127,7 +128,7 @@ def find_similar_user(item_input, path_user_weights, path_user2user_encode,
     
 ######################### 5. GET USER PREFRECNE
 
-def get_user_preferences(user_id, path_rating_df, path_df, plot=False):
+def get_user_preferences(user_id, path_rating_df, path_df):
     
     rating_df = pd.read_csv(path_rating_df)
     df = pd.read_csv(path_df)
@@ -153,18 +154,18 @@ def get_user_preferences(user_id, path_rating_df, path_df, plot=False):
 
 ############### 6. GET USER RECOMMENDATION
 
-def get_user_recommedations(similar_users, user_pref,path_df,
+def get_user_recommedations(similar_userss, user_pref,path_df,
                             path_synopsis_df, path_rating_df, n=10):
     
-    df = pd.read_csv(path_df)
-    synopsis_df = pd.read_csv(path_synopsis_df)
-    rating_df = pd.read_csv(path_rating_df)
+    # df = pd.read_csv(path_df)
+    # synopsis_df = pd.read_csv(path_synopsis_df)
+    # rating_df = pd.read_csv(path_rating_df)
     
     recommended_animes = []
     anime_list = []
-    
-    for user_id in similar_users.similiar_users.values:
-        pref_list = get_user_preferences(user_id, rating_df, df,plot=False)
+    for user_id in similar_userss.similiar_users.values:
+        
+        pref_list = get_user_preferences(user_id, path_rating_df, path_df)
         
         pref_list = pref_list[~pref_list.eng_version.isin(user_pref.eng_version.values)]
         
@@ -179,10 +180,10 @@ def get_user_recommedations(similar_users, user_pref,path_df,
                 n_user_pref = sorted_list[sorted_list.index == anime_name].values[0][0]
                 
                 if isinstance(anime_name, str):
-                    frame = getAnimeFrame(anime_name, df)
+                    frame = getAnimeFrame(anime_name, path_df)
                     anime_id = frame.anime_id.values[0]
                     genre = frame.Genres.values[0]
-                    synopsis = getSynopsis(int(anime_id), synopsis_df)
+                    synopsis = getSynopsis(int(anime_id), path_synopsis_df)
                     
                     recommended_animes.append({
                         "n": n_user_pref,
